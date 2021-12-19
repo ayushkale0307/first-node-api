@@ -59,29 +59,44 @@ app.get('/posts', function(req, res){
 })
 
 
-
-//Get list of all posts
-app.get('/posts', function(req, res){
-    Post.find({}, function(error, posts){
+// 1. Create API to get details of a single post
+app.get('/posts/:id', function(req, res){
+    const {id} = req.params;
+    Post.findByID(id, function(error, get_Single_post){
         if(error){
             // send error response
-            res.status(422).send({ error: 'Unable to fetch posts '})
+            res.status(422).send({ error: 'Unable to get details of a single post'})
         }else{
             // send success response
-            res.status(200).send(posts)
+            res.status(200).send(get_Single_post)
         }
     })
 })
 
-//Get list of all posts
-app.get('/posts', function(req, res){
-    Post.find({}, function(error, posts){
+// 2. Create API to update a post
+app.patch('/posts/:id', function(req, res){
+    const {id} = req.params;
+    Post.findByIDAndUpdate(id,req.body,{new:true},function( error, update_post){
         if(error){
             // send error response
-            res.status(422).send({ error: 'Unable to fetch posts '})
+            res.status(422).send({ error: 'Unable to update a post'})
         }else{
             // send success response
-            res.status(200).send(posts)
+            res.status(200).send(update_post)
+        }
+    })
+})
+
+// 3. Create API to delete a post
+app.delete('/posts/:id', function(req, res){
+    const {id} = req.params;
+    Post.findByIDAndDelete(id, function(error, delete_post){
+        if(error){
+            // send error response
+            res.status(422).send({ error: 'Unable to delete a post'})
+        }else{
+            // send success response
+            res.status(200).send(delete_post)
         }
     })
 })
